@@ -55,8 +55,8 @@ position:absolute;
 top:38%;
 left:50%;
 transform:translateX(-50%);
-font-size:32px;
-line-height:1.4;
+font-size:28px;
+line-height:1.5;
 opacity:0;
 z-index:3;
 white-space:pre;
@@ -67,12 +67,12 @@ font-family:monospace;
 
 .saya{
 position:absolute;
-top:52%;
+top:55%;
 left:50%;
 transform:translateX(-50%);
-font-size:26px;
+font-size:24px;
 opacity:0;
-transition:0.5s;
+transition:0.6s;
 z-index:3;
 }
 
@@ -86,7 +86,7 @@ transform:translateX(-50%);
 font-size:20px;
 line-height:1.6;
 opacity:0;
-transition:0.5s;
+transition:0.8s;
 z-index:3;
 }
 
@@ -98,12 +98,6 @@ width:2px;
 height:15px;
 background:white;
 opacity:0.5;
-animation:rain 0.6s linear infinite;
-}
-
-@keyframes rain{
-0%{transform:translateY(-100px);}
-100%{transform:translateY(100vh);}
 }
 
 /* 모바일 */
@@ -115,11 +109,11 @@ font-size:18px;
 }
 
 .saya{
-font-size:16px;
+font-size:18px;
 }
 
 .message{
-font-size:18px;
+font-size:16px;
 }
 
 }
@@ -137,10 +131,10 @@ font-size:18px;
 
 <div class="umbrella" id="umbrella">
 지안지안지안지안지안
-지안　　　　　　지안
-지안　　　　　　지안
-지안　　　　　　지안
-지안　　　　　　지안
+지안        지안
+지안        지안
+지안        지안
+지안        지안
 </div>
 
 <div class="saya" id="saya">
@@ -155,22 +149,31 @@ font-size:18px;
 
 <script>
 
+let drops=[]
 let umbrellaActive=false
 
 function createRain(){
 
-for(let i=0;i<120;i++){
+for(let i=0;i<140;i++){
 
 let drop=document.createElement("div")
 drop.className="rain"
 
 let x=Math.random()*window.innerWidth
-let y=Math.random()*-500
+let y=Math.random()*window.innerHeight
 
 drop.style.left=x+"px"
 drop.style.top=y+"px"
 
 document.body.appendChild(drop)
+
+drops.push({
+el:drop,
+x:x,
+y:y,
+speed:4+Math.random()*3,
+vx:0
+})
 
 }
 
@@ -191,41 +194,57 @@ document.getElementById("msg").style.opacity=1
 
 }
 
-function rainLoop(){
+function updateRain(){
 
-let drops=document.querySelectorAll(".rain")
+let umbrella=document.getElementById("umbrella")
+let rect=umbrella.getBoundingClientRect()
 
-drops.forEach(drop=>{
+drops.forEach(d=>{
 
-let rect=drop.getBoundingClientRect()
+d.y+=d.speed
+d.x+=d.vx
 
 if(umbrellaActive){
 
-let center=window.innerWidth/2
-let safeWidth=140
+if(
+d.x>rect.left &&
+d.x<rect.right &&
+d.y>rect.top &&
+d.y<rect.bottom
+){
 
-if(rect.left>center-safeWidth && rect.left<center+safeWidth && rect.top>window.innerHeight*0.45){
+d.y=rect.top
 
-drop.style.opacity=0
-return
+/* 튕김 */
+
+d.vx=(Math.random()-0.5)*6
+d.speed=2
 
 }
 
 }
 
-drop.style.opacity=0.5
+if(d.y>window.innerHeight){
+
+d.y=-20
+d.x=Math.random()*window.innerWidth
+d.vx=0
+d.speed=4+Math.random()*3
+
+}
+
+d.el.style.transform=`translate(${d.x}px,${d.y}px)`
 
 })
 
-requestAnimationFrame(rainLoop)
+requestAnimationFrame(updateRain)
 
 }
 
 createRain()
-rainLoop()
+updateRain()
 
 </script>
 
 </body>
 </html>
-
