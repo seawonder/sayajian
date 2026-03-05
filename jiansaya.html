@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사야에게</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:#0f172a;
+color:white;
+font-family:sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+overflow:hidden;
+}
+
+/* 제목 */
+
+.title{
+position:absolute;
+top:30px;
+left:50%;
+transform:translateX(-50%);
+font-size:26px;
+z-index:5;
+}
+
+/* 버튼 */
+
+.container{
+position:absolute;
+top:90px;
+z-index:5;
+}
+
+button{
+padding:12px 20px;
+font-size:16px;
+border:none;
+border-radius:6px;
+background:white;
+cursor:pointer;
+}
+
+/* 지안 우산 */
+
+.umbrella{
+position:absolute;
+top:38%;
+left:50%;
+transform:translateX(-50%);
+font-size:32px;
+line-height:1.4;
+opacity:0;
+transition:0.5s;
+z-index:3;
+}
+
+/* 사야 */
+
+.saya{
+position:absolute;
+top:52%;
+left:50%;
+transform:translateX(-50%);
+font-size:26px;
+opacity:0;
+transition:0.5s;
+z-index:3;
+}
+
+/* 메시지 */
+
+.message{
+position:absolute;
+bottom:120px;
+left:50%;
+transform:translateX(-50%);
+font-size:20px;
+line-height:1.6;
+opacity:0;
+transition:0.5s;
+z-index:3;
+}
+
+/* 비 */
+
+.rain{
+position:absolute;
+width:2px;
+height:15px;
+background:white;
+opacity:0.5;
+animation:rain 0.6s linear infinite;
+}
+
+@keyframes rain{
+0%{transform:translateY(-100px);}
+100%{transform:translateY(100vh);}
+}
+
+/* 모바일 */
+
+@media(max-width:500px){
+
+.umbrella{
+font-size:26px;
+}
+
+.saya{
+font-size:22px;
+}
+
+.message{
+font-size:18px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 class="title">사야에게</h1>
+
+<div class="container">
+<button id="startBtn" onclick="start()">눌러봐! ☔</button>
+</div>
+
+<div class="umbrella" id="umbrella">
+지안지안지안지안지안<br>
+지안　　　　　　지안<br>
+지안　　　　　　지안<br>
+지안　　　　　　지안<br>
+지안　　　　　　지안
+</div>
+
+<div class="saya" id="saya">
+사야
+</div>
+
+<div class="message" id="msg">
+내가 돈 열심히 벌어서<br>
+사야가 비 맞지 않게 해줄게 ☂️<br>
+보고 싶어! 사랑해!
+</div>
+
+<script>
+
+let umbrellaActive=false
+
+function createRain(){
+
+for(let i=0;i<120;i++){
+
+let drop=document.createElement("div")
+drop.className="rain"
+
+let x=Math.random()*window.innerWidth
+let y=Math.random()*-500
+
+drop.style.left=x+"px"
+drop.style.top=y+"px"
+
+document.body.appendChild(drop)
+
+}
+
+}
+
+function start(){
+
+document.getElementById("startBtn").style.display="none"
+
+umbrellaActive=true
+
+document.getElementById("umbrella").style.opacity=1
+document.getElementById("saya").style.opacity=1
+
+setTimeout(()=>{
+document.getElementById("msg").style.opacity=1
+},900)
+
+}
+
+function rainLoop(){
+
+let drops=document.querySelectorAll(".rain")
+
+drops.forEach(drop=>{
+
+let rect=drop.getBoundingClientRect()
+
+if(umbrellaActive){
+
+let center=window.innerWidth/2
+let safeWidth=140
+
+if(rect.left>center-safeWidth && rect.left<center+safeWidth && rect.top>window.innerHeight*0.45){
+
+drop.style.opacity=0
+return
+
+}
+
+}
+
+drop.style.opacity=0.5
+
+})
+
+requestAnimationFrame(rainLoop)
+
+}
+
+createRain()
+rainLoop()
+
+</script>
+
+</body>
+</html>
