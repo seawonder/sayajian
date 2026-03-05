@@ -58,6 +58,7 @@ transform:translateX(-50%);
 font-size:28px;
 line-height:1.5;
 opacity:0;
+transition:0.6s;
 z-index:3;
 white-space:pre;
 font-family:monospace;
@@ -67,7 +68,7 @@ font-family:monospace;
 
 .saya{
 position:absolute;
-top:55%;
+top:58%;
 left:50%;
 transform:translateX(-50%);
 font-size:24px;
@@ -97,7 +98,7 @@ position:absolute;
 width:2px;
 height:15px;
 background:white;
-opacity:0.5;
+opacity:0.6;
 }
 
 /* 모바일 */
@@ -154,24 +155,17 @@ let umbrellaActive=false
 
 function createRain(){
 
-for(let i=0;i<140;i++){
+for(let i=0;i<150;i++){
 
-let drop=document.createElement("div")
-drop.className="rain"
-
-let x=Math.random()*window.innerWidth
-let y=Math.random()*window.innerHeight
-
-drop.style.left=x+"px"
-drop.style.top=y+"px"
-
-document.body.appendChild(drop)
+let el=document.createElement("div")
+el.className="rain"
+document.body.appendChild(el)
 
 drops.push({
-el:drop,
-x:x,
-y:y,
-speed:4+Math.random()*3,
+el:el,
+x:Math.random()*window.innerWidth,
+y:Math.random()*window.innerHeight,
+vy:4+Math.random()*3,
 vx:0
 })
 
@@ -190,7 +184,7 @@ document.getElementById("saya").style.opacity=1
 
 setTimeout(()=>{
 document.getElementById("msg").style.opacity=1
-},900)
+},800)
 
 }
 
@@ -201,7 +195,7 @@ let rect=umbrella.getBoundingClientRect()
 
 drops.forEach(d=>{
 
-d.y+=d.speed
+d.y+=d.vy
 d.x+=d.vx
 
 if(umbrellaActive){
@@ -213,12 +207,14 @@ d.y>rect.top &&
 d.y<rect.bottom
 ){
 
+/* 우산 맞음 */
+
 d.y=rect.top
 
 /* 튕김 */
 
-d.vx=(Math.random()-0.5)*6
-d.speed=2
+d.vx=(Math.random()-0.5)*8
+d.vy=2
 
 }
 
@@ -229,7 +225,7 @@ if(d.y>window.innerHeight){
 d.y=-20
 d.x=Math.random()*window.innerWidth
 d.vx=0
-d.speed=4+Math.random()*3
+d.vy=4+Math.random()*3
 
 }
 
